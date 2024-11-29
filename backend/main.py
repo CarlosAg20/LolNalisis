@@ -187,8 +187,51 @@ def Clustering_Analisis(df_analisis, tops_clusters, fase, summoner_name):
     #plt.savefig(graph2_path)
     plt.close()
 
+    recomendaciones = []
+
+    for metric in main_stats:
+      user_stat = user_avg[metric]
+      cluster_stat = best_cluster_avg[metric]
+
+
+      diferencia_porcentual = abs((user_stat - cluster_stat) / cluster_stat) * 100
+
+
+      if metric == 'deaths':
+          if user_stat > cluster_stat:
+              if diferencia_porcentual < 27:
+                  recomendaciones.append(f"¡Casi lo logras en {metric}! Intenta reducir ligeramente tus muertes para igualar el promedio de los  mejores jugadores.")
+              else:
+                  recomendaciones.append(f"(-) Reduce la cantidad de {metric} para estar más cerca del promedio de los mejores jugadores.")
+          else:
+              recomendaciones.append(f"(+) Buen desempeño en {metric}: mantén o mejora este nivel bajo.")
+      else:
+          if user_stat < cluster_stat:
+              if diferencia_porcentual < 27:
+                  #print(f"{diferencia_porcentual} en {metric}")
+                  recomendaciones.append(f"¡Estás muy cerca en {metric}! Solo necesitas un pequeño aumento para alcanzar el nivel de los mejores jugadores.")
+              else:
+                  recomendaciones.append(f"(-) Mejora en {metric}: Incrementa tu {metric} para alcanzar el promedio de los mejores jugadores.")
+          else:
+              recomendaciones.append(f"(+) Buen desempeño en {metric}: mantén este nivel o sigue mejorando.")
+
+    for metric in alternativas:
+      user_stat = user_avg[metric]
+      cluster_stat = best_cluster_avg[metric]
+
+      diferencia_porcentual = abs((user_stat - cluster_stat) / cluster_stat) * 100
+
+      if user_stat < cluster_stat:
+          if diferencia_porcentual < 27:
+              recomendaciones.append(f"¡Estás muy cerca en {metric}! Solo necesitas un pequeño ajuste para igualar el promedio de los mejores jugadores.")
+          else:
+              recomendaciones.append(f"(-) Mejora en {metric}: Incrementa tu {metric} para acercarte al promedio de los mejores jugadores.")
+      else:
+          recomendaciones.append(f"(+) Buen desempeño en {metric}: mantén este nivel o sigue mejorando.")
+
     # Retornar las rutas de los gráficos
     #return graph1_path, graph2_path
+    print("REEECOMENDACIONES", recomendaciones)
     return chart1_path, chart2_path
 
 matches_data_early = []
