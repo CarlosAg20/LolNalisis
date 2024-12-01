@@ -37,7 +37,8 @@ def install_requirements():
 
 
 matplotlib.use('Agg')
-app.mount("/static", StaticFiles(directory="C:/Users/Charli/Documents/prueba/static"), name="static")
+#app.mount("/static", StaticFiles(directory="C:/Users/Charli/Documents/prueba/static"), name="static")
+#app.mount("/static", StaticFiles(directory="C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\static"), name="static")
 
 #DEFINIR PARÁMETROS=========================================================
 API_KEY = "RGAPI-3b6a6097-957f-4176-8dd0-5e22fb9df736"
