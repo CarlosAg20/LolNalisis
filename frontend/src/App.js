@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState } from 'react';
+import './App.css';
 
-function SummonerTool() {
-  const [summonerName, setSummonerName] = useState("");
-  const [tagline, setTagline] = useState("");
+function App() {
+  const [summonerName, setSummonerName] = useState('');
+  const [tagline, setTagline] = useState('');
   const [chartUrls, setChartUrls] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,10 +14,10 @@ function SummonerTool() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/analyze", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/analyze', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ summonerName, tagline }),
       });
@@ -27,10 +27,10 @@ function SummonerTool() {
         setChartUrls(data.charts);
       } else {
         const errorData = await response.json();
-        setError(errorData.detail || "Error desconocido");
+        setError(errorData.detail || 'Error desconocido');
       }
     } catch (err) {
-      setError("Error al conectarse con el backend. Intenta nuevamente.");
+      setError('Error al conectarse con el backend. Intenta nuevamente.');
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,11 @@ function SummonerTool() {
 
   const splitUrls = (urls) => {
     const chunkSize = 2;
-    return [urls.slice(0, chunkSize), urls.slice(chunkSize, chunkSize * 2), urls.slice(chunkSize * 2)];
+    return [
+      urls.slice(0, chunkSize),
+      urls.slice(chunkSize, chunkSize * 2),
+      urls.slice(chunkSize * 2),
+    ];
   };
 
   const [earlyUrls, midUrls, lateUrls] = splitUrls(chartUrls);
@@ -46,7 +50,9 @@ function SummonerTool() {
   return (
     <div className="summoner-tool">
       <header className="app-header">
-        <h1>Herramienta de Invocador</h1>
+        <h1>
+          Herramienta de Invocador
+        </h1>
       </header>
       <main className="app-main">
         <form onSubmit={handleSubmit} className="search-form">
@@ -73,8 +79,23 @@ function SummonerTool() {
             />
           </div>
           <button type="submit" disabled={loading} className="submit-button">
-            {loading ? "Buscando..." : "Buscar"}
+            {loading ? 'Buscando...' : 'Buscar'}
           </button>
+          <span className="tooltip-trigger" aria-describedby="license-tooltip">
+            ?
+            <span id="license-tooltip" role="tooltip" className="tooltip">
+              Resumen Licencia: Los derechos de autor de este activo pertenecen a Riot Games Inc. 
+              Sin embargo: Riot Games permite el uso de su propiedad intelectual de League of Legends 
+              siempre que se cumplan las condiciones establecidas en su política legal. 
+              El activo sólo se utiliza para promocionar el producto. 
+              Descargo de responsabilidad: La Herramienta de Analisis de League of Legends para jugadores no está avalada por Riot Games 
+              ni refleja sus puntos de vista, opiniones o los de cualquier persona oficialmente involucrada 
+              en la producción y/o gestión de League of Legends.
+              Portada de Riot Games © Riot Games, Inc. Todos los derechos reservados. 
+              Riot Games', 'League of Legends', 'Legends of Runaterra' y 'PvP.net' son marcas comerciales, 
+              marcas de servicios o marcas registradas de Riot Games, Inc.
+            </span>
+          </span>
         </form>
 
         {error && <p className="error-message">Error: {error}</p>}
@@ -122,5 +143,5 @@ function SummonerTool() {
   );
 }
 
-export default SummonerTool;
+export default App;
 

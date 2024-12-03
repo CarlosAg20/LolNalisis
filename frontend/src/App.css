@@ -32,6 +32,7 @@ body {
   text-align: center;
   padding: 20px 0;
   border-bottom: 2px solid #c8aa6e;
+  position: relative;
 }
 
 .app-header h1 {
@@ -146,5 +147,66 @@ body {
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-trigger {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #c8aa6e;
+  color: #091428;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: help;
+  position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 300px;
+  background-color: #091428;
+  color: #f0e6d2;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -150px;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-size: 12px;
+  line-height: 1.4;
+  border: 1px solid #c8aa6e;
+  box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #091428 transparent transparent transparent;
+}
+
+.tooltip-trigger:hover .tooltip,
+.tooltip-trigger:focus .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .tooltip {
+    width: 90%;
+    left: 5%;
+    transform: none;
+  }
 }
 
