@@ -35,7 +35,6 @@ body {
   text-align: center;
   padding: 20px 0;
   border-bottom: 2px solid #c8aa6e;
-  position: relative;
 }
 
 .app-header h1 {
@@ -61,6 +60,7 @@ body {
   width: 100%;
   max-width: 400px;
   border: 1px solid #c8aa6e;
+  position: relative;
 }
 
 .form-group {
@@ -114,45 +114,82 @@ body {
   font-weight: bold;
 }
 
-.results {
-  margin-top: 30px;
+.player-info, .results {
+  background-color: rgba(9, 20, 40, 0.8);
+  border: 1px solid #c8aa6e;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
   width: 100%;
   max-width: 800px;
-}
-
-.results h2 {
-  text-align: center;
-  color: #c8aa6e;
-  font-size: 2em;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.chart-section {
-  margin-bottom: 30px;
-  background-color: rgba(9, 20, 40, 0.8);
-  padding: 20px;
-  border-radius: 8px;
   box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
 }
 
-.chart-section h3 {
-  color: #0ac8b9;
-  border-bottom: 2px solid #0ac8b9;
+.player-info h2, .results h2 {
+  color: #c8aa6e;
+  font-size: 1.8em;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #c8aa6e;
   padding-bottom: 5px;
+}
+
+.player-info p, .results p {
+  margin: 10px 0;
+  font-size: 1.1em;
+}
+
+.ranked-section {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: rgba(12, 27, 51, 0.6);
+  border-radius: 4px;
+}
+
+.ranked-section h4 {
+  color: #0ac8b9;
+  margin-bottom: 5px;
+}
+
+.phase-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(12, 27, 51, 0.6);
+  border-radius: 4px;
+}
+
+.phase-section h3 {
+  color: #0ac8b9;
   font-size: 1.5em;
-  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.phase-section h4 {
+  color: #c8aa6e;
+  margin-top: 15px;
+}
+
+.phase-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.phase-section li {
+  margin-bottom: 8px;
+  font-size: 1.1em;
 }
 
 .chart-image {
   max-width: 100%;
   height: auto;
-  margin-bottom: 20px;
-  border-radius: 8px;
+  margin: 10px 0;
+  border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .tooltip-trigger {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -162,14 +199,14 @@ body {
   text-align: center;
   line-height: 20px;
   font-size: 14px;
-  margin-left: 10px;
   cursor: help;
-  position: relative;
 }
 
 .tooltip {
   visibility: hidden;
   width: 300px;
+  max-height: 200px;
+  overflow-y: auto;
   background-color: #091428;
   color: #f0e6d2;
   text-align: left;
@@ -178,8 +215,7 @@ body {
   position: absolute;
   z-index: 1000;
   bottom: 125%;
-  left: 50%;
-  margin-left: -150px;
+  right: 0;
   opacity: 0;
   transition: opacity 0.3s, visibility 0.3s;
   font-size: 12px;
@@ -192,8 +228,7 @@ body {
   content: "";
   position: absolute;
   top: 100%;
-  left: 50%;
-  margin-left: -5px;
+  right: 5px;
   border-width: 5px;
   border-style: solid;
   border-color: #091428 transparent transparent transparent;
@@ -207,9 +242,9 @@ body {
 
 @media (max-width: 600px) {
   .tooltip {
-    width: 90%;
-    left: 5%;
-    transform: none;
+    width: 250px;
+    right: -10px;
   }
 }
+
 

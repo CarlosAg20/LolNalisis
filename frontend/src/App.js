@@ -70,6 +70,23 @@ function App() {
           <button type="submit" disabled={loading} className="submit-button">
             {loading ? 'Buscando...' : 'Buscar'}
           </button>
+          <span className="tooltip-trigger" aria-describedby="license-tooltip">
+            ?
+            <span id="license-tooltip" role="tooltip" className="tooltip">
+              Resumen Licencia: Los derechos de autor de este activo pertenecen a Riot Games Inc. 
+              Sin embargo: Riot Games permite el uso de su propiedad intelectual de League of Legends 
+              siempre que se cumplan las condiciones establecidas en su política legal. 
+              Esta Wiki cree que el uso entra dentro de la ley de uso justo de EE.UU. porque:
+              Los beneficios de Riot Games no están limitados en modo alguno. 
+              El activo sólo se utiliza para promocionar el producto. 
+              Descargo de responsabilidad: La Wiki de League of Legends de Fandom no está avalada por Riot Games 
+              ni refleja sus puntos de vista, opiniones o los de cualquier persona oficialmente involucrada 
+              en la producción y/o gestión de League of Legends.
+              Portada de Riot Games © Riot Games, Inc. Todos los derechos reservados. 
+              Riot Games', 'League of Legends', 'Legends of Runaterra' y 'PvP.net' son marcas comerciales, 
+              marcas de servicios o marcas registradas de Riot Games, Inc.
+            </span>
+          </span>
         </form>
 
         {error && <p className="error-message">Error: {error}</p>}
@@ -97,7 +114,7 @@ function App() {
               <div key={index} className="phase-section">
                 <h3>{phase.phase}</h3>
                 {phase.charts.map((url, idx) => (
-                  <img key={idx} src={url} alt={`Chart ${idx}`} className="chart-image" />
+                  <img key={idx} src={url} alt={`Chart ${idx + 1}`} className="chart-image" />
                 ))}
                 <h4>Recomendaciones</h4>
                 <ul>
@@ -115,3 +132,4 @@ function App() {
 }
 
 export default App;
+
