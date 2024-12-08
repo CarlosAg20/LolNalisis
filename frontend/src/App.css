@@ -9,7 +9,10 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-image: url('C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');
+  /*background-image: url('C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
+  /*background-image: url('C:\Users\Charli\Documents\prueba\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
+  background-image: url('./imgs/LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');
+  /*background-image: url('.\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

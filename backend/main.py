@@ -37,7 +37,17 @@ def install_requirements():
 
 
 matplotlib.use('Agg')
-#app.mount("/static", StaticFiles(directory="C:/Users/Charli/Documents/prueba/static"), name="static")
+# Crea la carpeta "staticc" si no existe
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Construir la ruta relativa para "staticc"
+STATIC_DIR = os.path.join(BASE_DIR, "../staticc")  # Asume que "staticc" está al nivel del proyecto, no en backend
+
+# Crear la carpeta "staticc" si no existe
+if not os.path.exists(STATIC_DIR):
+    os.makedirs(STATIC_DIR)
+
+app.mount("/staticc", StaticFiles(directory="C:/Users/Charli/Documents/prueba/staticc"), name="staticc")
 #app.mount("/static", StaticFiles(directory="C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\static"), name="static")
 
 #DEFINIR PARÁMETROS=========================================================
@@ -160,7 +170,8 @@ def Clustering_Analisis(df_analisis, tops_clusters, fase, summoner_name):
     plt.grid(axis='y', linestyle='--', alpha=0.7)
 
     # Guardar gráfico
-    chart1_path = f"static/graph1_{summoner_name}_{fase}.png"
+    chart1_path = f"../staticc/graph1_{summoner_name}_{fase}.png"
+    print(f"Gráfica guardada en {chart1_path}")
     plt.savefig(chart1_path)
 
 
@@ -182,7 +193,8 @@ def Clustering_Analisis(df_analisis, tops_clusters, fase, summoner_name):
     plt.legend(fontsize=10)
 
     # Guardar gráfico
-    chart2_path = f"static/graph2_{summoner_name}_{fase}.png"
+    chart2_path = f"../staticc/graph2_{summoner_name}_{fase}.png"
+    print(f"Gráfica guardada en {chart2_path}")
     plt.savefig(chart2_path)
     #graph2_path = f"graph2_{summoner_name}_{fase}.png"
     #plt.savefig(graph2_path)
@@ -233,7 +245,7 @@ def Clustering_Analisis(df_analisis, tops_clusters, fase, summoner_name):
     # Retornar las rutas de los gráficos
     #return graph1_path, graph2_path
     print("REEECOMENDACIONES", recomendaciones)
-    return chart1_path, chart2_path
+    return [chart1_path, chart2_path], recomendaciones
 
 matches_data_early = []
 matches_data_mid = []
@@ -435,9 +447,7 @@ app.add_middleware(
 # Endpoint para ejecutar la función y devolver las gráficas
 #print(summoner_name, tagline)
 
-matches_data_early = []
-matches_data_mid = []
-matches_data_late = []
+
 
 
 df_analisis_early = pd.DataFrame(matches_data_early)
@@ -509,46 +519,46 @@ def obtener_info_jugador(puuid):
 async def analyze_data(data: SummonerData):
     try:
         puuid = obtener_puuid(data.summonerName, data.tagline)
-        print(obtener_info_jugador(puuid))
-        print("puid guardado", puuid)
-        partidas_usuario = obtener_historial_partidas(puuid)
-        print("x")
-        print("partidas usuario", partidas_usuario)
+        player_info = obtener_info_jugador(puuid)
 
-
-        summoner_name = data.summonerName
+        partidas_usuario = obtener_historial_partidas(puuid)  # Implementar esta función
+        static_url_base = "http://localhost:8000/staticc"
+        chart_data = []
 
         for i, match_id in enumerate(partidas_usuario):
-            print("ciclo for match id", match_id)
             if i >= 10:
                 break
-            process_match(match_id, 'early', 0, 15, puuid)    # Early game
-            process_match(match_id, 'mid', 0, 30, puuid)   # Mid game: 15-30 min
-            process_match(match_id, 'late', 0, 999, puuid) # Late game: 30 min hasta el final
-           
-            #time.sleep(2.0)
-        print("1")
-        #Almaceno datos del usuario
-        df_analisis_early = pd.DataFrame(matches_data_early)
-        df_analisis_mid = pd.DataFrame(matches_data_mid)
-        df_analisis_late = pd.DataFrame(matches_data_late)
-        print("2")
-        # Generar gráficas
-        print("vars", df_analisis_early, tops_clusters_early, summoner_name)
-        chart_paths = []
-        chart_paths.extend(Clustering_Analisis(df_analisis_early, tops_clusters_early, 'Early_Game', summoner_name))
-        chart_paths.extend(Clustering_Analisis(df_analisis_mid, tops_clusters_mid, 'Mid_Game', summoner_name))
-        chart_paths.extend(Clustering_Analisis(df_analisis_late, tops_clusters_late, 'Late_Game', summoner_name))
-        print("3", chart_paths)
-        # URL de las gráficas.
-        chart_urls = [f"http://localhost:8000/{path}" for path in chart_paths]
-        return {"charts": chart_urls}
-    
-    except HTTPException as http_exc:
-        raise http_exc
+            process_match(match_id, 'early', 0, 15, puuid)
+            process_match(match_id, 'mid', 0, 30, puuid)
+            process_match(match_id, 'late', 0, 999, puuid)
+
+        df_early = pd.DataFrame(matches_data_early)
+        df_mid = pd.DataFrame(matches_data_mid)
+        df_late = pd.DataFrame(matches_data_late)
+
+        for phase, df_analysis, tops_clusters in zip(
+            ['Early Game', 'Mid Game', 'Late Game'],
+            [df_early, df_mid, df_late],
+            [tops_clusters_early, tops_clusters_mid, tops_clusters_late]
+        ):
+            chart_paths, recommendations = Clustering_Analisis(df_analysis, tops_clusters, phase, data.summonerName)
+            public_chart_paths = [
+                f"{static_url_base}/{os.path.basename(chart_path)}"
+                for chart_path in chart_paths
+            ]
+
+            chart_data.append({
+                "phase": phase,
+                "charts": public_chart_paths,
+                "recommendations": recommendations,
+            })
+
+        return {
+            "player_info": player_info,
+            "data": chart_data,
+        }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
 
 

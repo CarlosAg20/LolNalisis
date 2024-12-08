@@ -4,7 +4,8 @@ import './App.css';
 function App() {
   const [summonerName, setSummonerName] = useState('');
   const [tagline, setTagline] = useState('');
-  const [chartUrls, setChartUrls] = useState([]);
+  const [playerInfo, setPlayerInfo] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -23,11 +24,12 @@ function App() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setChartUrls(data.charts);
+        const responseData = await response.json();
+        setPlayerInfo(responseData.player_info || null);
+        setData(responseData.data || []);
       } else {
         const errorData = await response.json();
-        setError(errorData.detail || 'Error desconocido');
+        setError(errorData.error || 'Error desconocido');
       }
     } catch (err) {
       setError('Error al conectarse con el backend. Intenta nuevamente.');
@@ -36,23 +38,10 @@ function App() {
     }
   };
 
-  const splitUrls = (urls) => {
-    const chunkSize = 2;
-    return [
-      urls.slice(0, chunkSize),
-      urls.slice(chunkSize, chunkSize * 2),
-      urls.slice(chunkSize * 2),
-    ];
-  };
-
-  const [earlyUrls, midUrls, lateUrls] = splitUrls(chartUrls);
-
   return (
     <div className="summoner-tool">
       <header className="app-header">
-        <h1>
-          Herramienta de Invocador
-        </h1>
+        <h1>Herramienta de Invocador</h1>
       </header>
       <main className="app-main">
         <form onSubmit={handleSubmit} className="search-form">
@@ -81,61 +70,43 @@ function App() {
           <button type="submit" disabled={loading} className="submit-button">
             {loading ? 'Buscando...' : 'Buscar'}
           </button>
-          <span className="tooltip-trigger" aria-describedby="license-tooltip">
-            ?
-            <span id="license-tooltip" role="tooltip" className="tooltip">
-              Resumen Licencia: Los derechos de autor de este activo pertenecen a Riot Games Inc. 
-              Sin embargo: Riot Games permite el uso de su propiedad intelectual de League of Legends 
-              siempre que se cumplan las condiciones establecidas en su política legal. 
-              El activo sólo se utiliza para promocionar el producto. 
-              Descargo de responsabilidad: La Herramienta de Analisis de League of Legends para jugadores no está avalada por Riot Games 
-              ni refleja sus puntos de vista, opiniones o los de cualquier persona oficialmente involucrada 
-              en la producción y/o gestión de League of Legends.
-              Portada de Riot Games © Riot Games, Inc. Todos los derechos reservados. 
-              Riot Games', 'League of Legends', 'Legends of Runaterra' y 'PvP.net' son marcas comerciales, 
-              marcas de servicios o marcas registradas de Riot Games, Inc.
-            </span>
-          </span>
         </form>
 
         {error && <p className="error-message">Error: {error}</p>}
 
-        {chartUrls.length > 0 && (
+        {playerInfo && (
+          <div className="player-info">
+            <h2>Información de Perfil</h2>
+            <p><strong>Nombre:</strong> {playerInfo.summoner_name}</p>
+            <p><strong>Nivel:</strong> {playerInfo.account_level}</p>
+            <h3>Clasificatorias:</h3>
+            {Object.entries(playerInfo.ranked_info).map(([queue, info]) => (
+              <div key={queue} className="ranked-section">
+                <h4>{queue.replace('_', ' ')}</h4>
+                <p><strong>{info.tier} {info.rank}</strong> - {info.lp} LP</p>
+                <p>Victorias: {info.wins} | Derrotas: {info.losses}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {data.length > 0 && (
           <div className="results">
             <h2>Resultados de Análisis</h2>
-            <div className="chart-section">
-              <h3>Early Game</h3>
-              {earlyUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Early Game Gráfica ${index + 1}`}
-                  className="chart-image"
-                />
-              ))}
-            </div>
-            <div className="chart-section">
-              <h3>Mid Game</h3>
-              {midUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Mid Game Gráfica ${index + 1}`}
-                  className="chart-image"
-                />
-              ))}
-            </div>
-            <div className="chart-section">
-              <h3>Late Game</h3>
-              {lateUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Late Game Gráfica ${index + 1}`}
-                  className="chart-image"
-                />
-              ))}
-            </div>
+            {data.map((phase, index) => (
+              <div key={index} className="phase-section">
+                <h3>{phase.phase}</h3>
+                {phase.charts.map((url, idx) => (
+                  <img key={idx} src={url} alt={`Chart ${idx}`} className="chart-image" />
+                ))}
+                <h4>Recomendaciones</h4>
+                <ul>
+                  {phase.recommendations.map((rec, idx) => (
+                    <li key={idx}>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         )}
       </main>
@@ -144,4 +115,3 @@ function App() {
 }
 
 export default App;
-
