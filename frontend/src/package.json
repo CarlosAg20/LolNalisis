@@ -4,11 +4,11 @@
   "description": "Hola como estas",
   "main": "index.js",
   "scripts": {
-  "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject"
-},
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "repository": {
     "type": "git",
     "url": "LolNalisis"
@@ -17,5 +17,9 @@
     "Lol"
   ],
   "author": "Carlos Daniel Agudelo Villarreal",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4"
+  }
 }
