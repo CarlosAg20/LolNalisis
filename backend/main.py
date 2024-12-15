@@ -47,8 +47,8 @@ STATIC_DIR = os.path.join(BASE_DIR, "../staticc")  # Asume que "staticc" está a
 if not os.path.exists(STATIC_DIR):
     os.makedirs(STATIC_DIR)
 
-app.mount("/staticc", StaticFiles(directory="C:/Users/Charli/Documents/prueba/staticc"), name="staticc")
-#app.mount("/static", StaticFiles(directory="C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\static"), name="static")
+#app.mount("/staticc", StaticFiles(directory="C:/Users/Charli/Documents/prueba/staticc"), name="staticc")
+app.mount("/staticc", StaticFiles(directory="C:/Users/Maest/OneDrive/Escritorio/Pr2/LolNalisis/staticc"), name="staticc")
 
 #DEFINIR PARÁMETROS=========================================================
 API_KEY = "RGAPI-3b6a6097-957f-4176-8dd0-5e22fb9df736"

@@ -9,10 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /*background-image: url('C:\Users\Maest\OneDrive\Escritorio\Pr\LolNalisis\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
-  /*background-image: url('C:\Users\Charli\Documents\prueba\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
-  background-image: url('./imgs/LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');
-  /*background-image: url('.\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');*/
+  background-image: url('C:\Users\Maest\OneDrive\Escritorio\Pr2\LolNalisis\frontend\src\imgs\LEAGUE-OF-LEGENDS-WILD-RIFT.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -83,29 +80,72 @@ body {
   color: #f0e6d2;
 }
 
-.submit-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #0ac8b9;
-  color: #091428;
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.submit-button,
+.clear-button,
+.save-pdf-button {
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.submit-button {
+  background-color: #0ac8b9;
+  color: #091428;
 }
 
 .submit-button:hover {
-  background-color: #cdfafa;
+  background-color: #0ff3d6;
 }
 
-.submit-button:disabled {
+.clear-button {
+  background-color: #c89b3c;
+  color: #091428;
+}
+
+.clear-button:hover {
+  background-color: #f0c05a;
+}
+
+.save-pdf-button {
   background-color: #1e2328;
+  color: #c8aa6e;
+  border: 2px solid #c8aa6e;
+  margin-top: 20px;
+}
+
+.save-pdf-button:hover {
+  background-color: #c8aa6e;
+  color: #1e2328;
+}
+
+.submit-button:disabled,
+.clear-button:disabled,
+.save-pdf-button:disabled {
+  background-color: #5c5b57;
   color: #a09b8c;
   cursor: not-allowed;
 }
+
+/* Add a glow effect on button focus for accessibility */
+.submit-button:focus,
+.clear-button:focus,
+.save-pdf-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(200, 170, 110, 0.5);
+}
+
 
 .error-message {
   color: #ff4655;
@@ -245,6 +285,15 @@ body {
     width: 250px;
     right: -10px;
   }
-}
+  .button-group {
+    flex-direction: column;
+  }
 
+  .submit-button,
+  .clear-button,
+  .save-pdf-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
 
